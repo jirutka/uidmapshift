@@ -1,16 +1,13 @@
 #!/usr/bin/env lua
 
-local dirent = require 'posix.dirent'
 local optarg = require 'optarg'
-local posix = require 'posix'
-local sys_stat = require 'posix.sys.stat'
-local unistd = require 'posix.unistd'
+local unix = require 'unix'
 
-local chown = unistd.chown
-local is_dir = sys_stat.S_ISDIR
-local is_link = sys_stat.S_ISLNK
-local listdir = dirent.files
-local lstat = sys_stat.lstat
+local chown = unix.chown
+local is_dir = unix.S_ISDIR
+local is_link = unix.S_ISLNK
+local lstat = unix.lstat
+local opendir = unix.opendir
 local max = math.max
 local min = math.min
 
@@ -60,20 +57,20 @@ local function walk_directory (dir_path)
   end
 
   local function yieldtree (dir)
-    local ok, res = pcall(listdir, dir)
-    if not ok then
-      printf_err(res:gsub("bad argument #1 to '%?' %((.*)%)", '%1'))
+    local dirh, err = opendir(dir)
+    if err then
+      printf_err("%s: %s", err, dir)
       return
     end
 
-    for entry in res do
+    for entry in dirh:files('name') do
       if entry ~= '.' and entry ~= '..' then
         local path = dir..'/'..entry
         local stat = assert(lstat(path))
 
         coroutine.yield(path, stat)
 
-        if is_dir(stat.st_mode) ~= 0 then
+        if is_dir(stat.mode) then
           yieldtree(path)  -- recursive call
         end
       end
@@ -100,7 +97,7 @@ local function shift_owner (opts, path, uid, gid)
     local _, err = chown(path, new_uid, new_gid)
 
     if err then
-      printf_err("failed to chown %d:%d %s", new_uid, new_gid, path)
+      printf_err("%s: chown %d:%d %s", err, new_uid, new_gid, path)
     elseif opts.verbose then
       printf("chown %d:%d %s  # was %d:%d", new_uid, new_gid, path, uid, gid)
     end
@@ -165,8 +162,8 @@ end
 local min_uid, max_uid, min_gid, max_gid = 0, 0, 0, 0
 
 for path, stat in walk_directory(opts.path) do
-  if is_link(stat.st_mode) == 0 then  -- not link
-    local old_uid, old_gid = stat.st_uid, stat.st_gid
+  if not is_link(stat.mode) then
+    local old_uid, old_gid = stat.uid, stat.gid
 
     if opts.show_range then
       min_uid = min(min_uid, old_uid)
