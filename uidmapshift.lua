@@ -3,9 +3,9 @@
 local optarg = require 'optarg'
 local unix = require 'unix'
 
-local chown = unix.chown
 local is_dir = unix.S_ISDIR
 local is_link = unix.S_ISLNK
+local lchown = unix.lchown
 local lstat = unix.lstat
 local opendir = unix.opendir
 local max = math.max
@@ -94,12 +94,12 @@ local function shift_owner (opts, path, uid, gid)
   local new_gid = opts.convert_gids and map_id(gid) or -1
 
   if new_uid ~= -1 or new_gid ~= -1 then
-    local _, err = chown(path, new_uid, new_gid)
+    local _, err = lchown(path, new_uid, new_gid)
 
     if err then
-      printf_err("%s: chown %d:%d %s", err, new_uid, new_gid, path)
+      printf_err("%s: chown -h %d:%d %s", err, new_uid, new_gid, path)
     elseif opts.verbose then
-      printf("chown %d:%d %s  # was %d:%d", new_uid, new_gid, path, uid, gid)
+      printf("chown -h %d:%d %s  # was %d:%d", new_uid, new_gid, path, uid, gid)
     end
   end
 end
@@ -162,19 +162,17 @@ end
 local min_uid, max_uid, min_gid, max_gid = 0, 0, 0, 0
 
 for path, stat in walk_directory(opts.path) do
-  if not is_link(stat.mode) then
-    local old_uid, old_gid = stat.uid, stat.gid
+  local old_uid, old_gid = stat.uid, stat.gid
 
-    if opts.show_range then
-      min_uid = min(min_uid, old_uid)
-      max_uid = max(max_uid, old_uid)
-      min_gid = min(min_gid, old_gid)
-      max_gid = max(max_gid, old_gid)
-    end
+  if opts.show_range then
+    min_uid = min(min_uid, old_uid)
+    max_uid = max(max_uid, old_uid)
+    min_gid = min(min_gid, old_gid)
+    max_gid = max(max_gid, old_gid)
+  end
 
-    if opts.convert_uids or opts.convert_gids then
-      shift_owner(opts, path, old_uid, old_gid)
-    end
+  if opts.convert_uids or opts.convert_gids then
+    shift_owner(opts, path, old_uid, old_gid)
   end
 end
 
