@@ -64,7 +64,7 @@ local function walk_directory (dir_path)
     end
 
     for entry in dirh:files('name') do
-      if entry ~= '.' and entry ~= '..' then
+      if entry ~= '..' and (entry ~= '.' or dir == dir_path) then
         local path = dir..'/'..entry
         local stat = assert(lstat(path))
 
