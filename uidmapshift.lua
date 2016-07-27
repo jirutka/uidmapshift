@@ -12,7 +12,7 @@ local max = math.max
 local min = math.min
 
 
-local version = '0.0.0'
+local version = '0.1.0'
 
 local help_opts = [[
 Options:
