@@ -8,9 +8,12 @@ local is_link = unix.S_ISLNK
 local lchown = unix.lchown
 local lstat = unix.lstat
 local opendir = unix.opendir
+local exit = os.exit
 local max = math.max
 local min = math.min
 
+
+local version = '0.0.0'
 
 local help_opts = [[
 Options:
@@ -19,6 +22,7 @@ Options:
   -u, --uid      Convert UIDs (owners)
   -r, --range    Find min/max UID and GID used in the directory tree
   -v, --verbose  Be verbose
+  -V, --version  Show version information and exit
   -h, --help     Show this help and exit
 ]]
 
@@ -135,6 +139,7 @@ local function parse_opts ()
     convert_gids = opts.gid or opts.both,
     show_range = opts.range,
     show_help = opts.help,
+    show_version = opts.version,
     verbose = opts.verbose,
     path = args[1],
     first = src,
@@ -151,12 +156,16 @@ local opts = parse_opts()
 if not opts then
   print('')
   print_help()
-  os.exit(1)
+  exit(1)
 end
 
 if opts.show_help then
   print_help()
-  os.exit(0)
+  exit(0)
+
+elseif opts.show_version then
+  printf("uidmapshift %s", version)
+  exit(0)
 end
 
 local min_uid, max_uid, min_gid, max_gid = 0, 0, 0, 0
