@@ -4,7 +4,6 @@ local optarg = require 'optarg'
 local unix = require 'unix'
 
 local is_dir = unix.S_ISDIR
-local is_link = unix.S_ISLNK
 local lchown = unix.lchown
 local lstat = unix.lstat
 local opendir = unix.opendir
