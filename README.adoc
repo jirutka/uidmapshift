@@ -1,0 +1,20 @@
+= uidmapshift
+Jakub Jirutka <https://github.com/jirutka[@jirutka]>
+
+This tool shifts UIDs/GIDs of directory entries recursively by some offset.
+It’s designed for converting privileged LXC containers to unprivileged and vice versa.
+
+This is basically a reimplementation of http://bazaar.launchpad.net/%7Eserge-hallyn/+junk/nsexec/view/head:/uidmapshift.c[uidmapshift] from http://bazaar.launchpad.net/~serge-hallyn/+junk/nsexec[nsexec] in Lua.
+
+
+== Requirements
+
+* Lua 5.1+ or LuaJIT 2.x
+* https://github.com/wahern/lunix/[lunix]
+* https://github.com/ncopa/lua-optarg[optarg]
+
+
+== License
+
+This project is licensed under http://opensource.org/licenses/MIT/[MIT License].
+For the full text of the license, see the link:LICENSE[LICENSE] file.
