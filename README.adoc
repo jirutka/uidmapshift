@@ -10,8 +10,8 @@ This is basically a reimplementation of http://bazaar.launchpad.net/%7Eserge-hal
 == Requirements
 
 * Lua 5.1+ or LuaJIT 2.x
-* https://github.com/wahern/lunix/[lunix]
-* https://github.com/ncopa/lua-optarg[optarg]
+* https://github.com/wahern/lunix/[lunix] (outdated on LuaRocks, see https://github.com/wahern/lunix/issues/10[lunix#10])
+* https://github.com/ncopa/lua-optarg[optarg] (not yet on LuaRocks, see https://github.com/ncopa/lua-optarg/pull/1[lua-optarg#1])
 
 
 == Installation
