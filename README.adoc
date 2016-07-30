@@ -14,6 +14,17 @@ This is basically a reimplementation of http://bazaar.launchpad.net/%7Eserge-hal
 * https://github.com/ncopa/lua-optarg[optarg]
 
 
+== Installation
+
+=== Alpine Linux
+
+. Add `edge/testing` repository (e.g. http://dl-cdn.alpinelinux.org/alpine/edge/testing) to `/etc/apk/repositories`, if you don’t have it yet, and run `apk update`.
+
+. Install https://pkgs.alpinelinux.org/package/edge/testing/x86_64/uidmapshift[uidmapshift]:
++
+    apk add uidmapshift
+
+
 == License
 
 This project is licensed under http://opensource.org/licenses/MIT/[MIT License].
