@@ -18,9 +18,9 @@ This is basically a reimplementation of http://bazaar.launchpad.net/%7Eserge-hal
 
 === Alpine Linux
 
-. Add `edge/testing` repository (e.g. http://dl-cdn.alpinelinux.org/alpine/edge/testing) to `/etc/apk/repositories`, if you don’t have it yet, and run `apk update`.
+. Add `edge/community` repository (e.g. http://dl-cdn.alpinelinux.org/alpine/edge/community) to `/etc/apk/repositories`, if you don’t have it yet, and run `apk update`.
 
-. Install https://pkgs.alpinelinux.org/package/edge/testing/x86_64/uidmapshift[uidmapshift]:
+. Install https://pkgs.alpinelinux.org/package/edge/community/x86_64/uidmapshift[uidmapshift]:
 +
     apk add uidmapshift
 
